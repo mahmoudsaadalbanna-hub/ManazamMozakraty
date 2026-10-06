@@ -24,7 +24,7 @@ jobs:
 
       - name: Extract Android project
         run: |
-          unzip -q ManazamMozakraty_Android_Project.zip -d project
+          unzip -q ManazamMozakraty_Android_Project_With_Icon.zip -d project
 
       - name: Build APK
         working-directory: project/ManazamMozakratyAndroid
