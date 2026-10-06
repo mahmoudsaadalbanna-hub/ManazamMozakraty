@@ -42,7 +42,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:10px 0 25px}
 @media(max-width:850px){.stats{grid-template-columns:repeat(2,1fr)}.form-grid{grid-template-columns:1fr 1fr}.subjects{grid-template-columns:1fr}.filters{grid-template-columns:1fr}}
 @media(max-width:560px){.container{width:min(100% - 16px,1100px)}.stats{gap:9px}.card{padding:13px}.form-grid{grid-template-columns:1fr}.calendar{grid-template-columns:repeat(7,minmax(78px,1fr));overflow-x:auto}.calendar-wrap{overflow-x:auto}.day{min-width:78px}.task{grid-template-columns:auto 1fr}.task .actions{grid-column:2}.head{align-items:flex-start}.tools{width:100%}}
 </style>
-</head>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#2563eb"><link rel="icon" href="icon-192.png" type="image/png"><link rel="apple-touch-icon" href="icon-192.png"></head>
 <body>
 <header><div class="container head">
   <div><div class="logo">📚 منظم مذاكرتي 🚀</div><div class="sub">نظّم وقتك، تابع مهامك، وشوف تقدمك</div></div>
@@ -292,5 +292,5 @@ function importData(e){
 document.getElementById("taskDate").value=today();
 render();
 </script>
-</body>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').catch(()=>{});}</script></body>
 </html>
