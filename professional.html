@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#2563eb">
+<meta name="description" content="منظم مذاكرتي - تطبيق بسيط لتنظيم المواد والمهام ومتابعة التقدم الدراسي">
+<title>منظم مذاكرتي 🚀</title>
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--text:#172033;--muted:#667085;--primary:#2563eb;--primary2:#1d4ed8;--border:#e5e7eb;--danger:#dc2626;--success:#16a34a;--shadow:0 8px 24px rgba(15,23,42,.07)}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif;background:var(--bg);color:var(--text);transition:.2s}
+body.dark{--bg:#0f172a;--card:#111c31;--text:#f1f5f9;--muted:#a8b2c1;--border:#26344d;--shadow:0 8px 24px rgba(0,0,0,.22)}
+.container{width:min(1100px,calc(100% - 24px));margin:auto}
+header{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+.head{display:flex;align-items:center;justify-content:space-between;padding:14px 0;gap:10px}
+.logo{font-weight:900;font-size:20px}.sub{font-size:12px;color:var(--muted)}
+button,input,select{font:inherit}button{border:0;cursor:pointer}
+.icon-btn,.btn{border-radius:12px;padding:10px 14px}.icon-btn{background:var(--border);color:var(--text)}
+.btn{background:var(--primary);color:#fff;font-weight:700}.btn:hover{background:var(--primary2)}
+.btn.secondary{background:var(--border);color:var(--text)}.btn.danger{background:var(--danger)}
+main{padding:20px 0 50px}.grid{display:grid;gap:14px}
+.stats{grid-template-columns:repeat(4,1fr);margin-bottom:16px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:16px;box-shadow:var(--shadow)}
+.stat b{font-size:26px;display:block}.stat span{color:var(--muted);font-size:13px}
+.section-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.section-title h2{font-size:18px;margin:0}.tools{display:flex;gap:8px;flex-wrap:wrap}
+.form-grid{grid-template-columns:1.4fr 1fr 1fr 1fr auto}.field{display:flex;flex-direction:column;gap:6px}
+label{font-size:12px;color:var(--muted)}input,select{width:100%;padding:11px 12px;border:1px solid var(--border);border-radius:12px;background:var(--card);color:var(--text);outline:none}
+input:focus,select:focus{border-color:var(--primary)}
+.filters{grid-template-columns:1.5fr 1fr;align-items:center}.chips{display:flex;gap:7px;flex-wrap:wrap}
+.chip{padding:8px 12px;border-radius:999px;background:var(--border);color:var(--text);font-size:13px}.chip.active{background:var(--primary);color:#fff}
+.subjects{grid-template-columns:repeat(2,1fr)}.subject-head{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.subject-title{font-weight:800}.actions{display:flex;gap:6px}.mini{padding:7px 9px;border-radius:9px;background:var(--border);color:var(--text);font-size:12px}.mini.danger{color:#fff;background:var(--danger)}
+.progress{height:9px;background:var(--border);border-radius:99px;overflow:hidden;margin:12px 0}.progress>i{display:block;height:100%;background:var(--primary);border-radius:99px}
+.meta{font-size:12px;color:var(--muted)}.task-list{margin-top:12px;display:grid;gap:8px}
+.task{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;border:1px solid var(--border);border-radius:12px;padding:10px}
+.task.done .task-name{text-decoration:line-through;opacity:.55}.task-name{font-weight:650}
+.empty{padding:22px;text-align:center;color:var(--muted)}
+.calendar{grid-template-columns:repeat(7,1fr)}.day{min-height:105px}.day b{display:block;margin-bottom:6px}.day small{display:block;color:var(--muted);font-size:11px;margin-bottom:5px}.cal-task{font-size:11px;padding:5px 6px;border-radius:8px;background:color-mix(in srgb,var(--primary) 13%,transparent);margin-top:5px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.notice{position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(20px);opacity:0;pointer-events:none;background:#111827;color:#fff;padding:11px 16px;border-radius:12px;z-index:100;transition:.2s;box-shadow:var(--shadow)}.notice.show{opacity:1;transform:translateX(-50%) translateY(0)}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:10px 0 25px}
+@media(max-width:850px){.stats{grid-template-columns:repeat(2,1fr)}.form-grid{grid-template-columns:1fr 1fr}.subjects{grid-template-columns:1fr}.filters{grid-template-columns:1fr}}
+@media(max-width:560px){.container{width:min(100% - 16px,1100px)}.stats{gap:9px}.card{padding:13px}.form-grid{grid-template-columns:1fr}.calendar{grid-template-columns:repeat(7,minmax(78px,1fr));overflow-x:auto}.calendar-wrap{overflow-x:auto}.day{min-width:78px}.task{grid-template-columns:auto 1fr}.task .actions{grid-column:2}.head{align-items:flex-start}.tools{width:100%}}
+</style>
+</head>
+<body>
+<header><div class="container head">
+  <div><div class="logo">📚 منظم مذاكرتي 🚀</div><div class="sub">نظّم وقتك، تابع مهامك، وشوف تقدمك</div></div>
+  <button class="icon-btn" id="themeBtn" onclick="toggleTheme()">🌙</button>
+</div></header>
+
+<main class="container">
+  <section class="grid stats">
+    <div class="card stat"><span>المواد</span><b id="statSubjects">0</b></div>
+    <div class="card stat"><span>كل المهام</span><b id="statTasks">0</b></div>
+    <div class="card stat"><span>المكتملة</span><b id="statDone">0</b></div>
+    <div class="card stat"><span>نسبة الإنجاز</span><b id="statPercent">0%</b></div>
+  </section>
+
+  <section class="card" style="margin-bottom:14px">
+    <div class="section-title"><h2>➕ إضافة مادة</h2></div>
+    <form id="subjectForm" class="grid form-grid">
+      <div class="field"><label>اسم المادة</label><input id="subjectName" maxlength="60" required placeholder="مثال: الرياضيات"></div>
+      <div></div><div></div><div></div><button class="btn">إضافة</button>
+    </form>
+  </section>
+
+  <section class="card" style="margin-bottom:14px">
+    <div class="section-title"><h2>📝 إضافة مهمة</h2></div>
+    <form id="taskForm" class="grid form-grid">
+      <div class="field"><label>اسم المهمة</label><input id="taskName" maxlength="100" required placeholder="مثال: حل واجب الدرس 3"></div>
+      <div class="field"><label>المادة</label><select id="taskSubject" required></select></div>
+      <div class="field"><label>التاريخ</label><input id="taskDate" type="date" required></div>
+      <div class="field"><label>الوقت (اختياري)</label><input id="taskTime" type="time"></div>
+      <button class="btn">إضافة</button>
+    </form>
+  </section>
+
+  <section class="card" style="margin-bottom:14px">
+    <div class="section-title"><h2>🔎 المهام</h2></div>
+    <div class="grid filters">
+      <input id="search" placeholder="ابحث عن مهمة..." oninput="render()">
+      <select id="sort" onchange="render()"><option value="near">الأقرب موعدًا</option><option value="far">الأبعد موعدًا</option><option value="created">الأحدث إضافة</option></select>
+    </div>
+    <div class="chips" style="margin-top:10px">
+      <button class="chip active" data-filter="all">الكل</button>
+      <button class="chip" data-filter="today">اليوم</button>
+      <button class="chip" data-filter="week">هذا الأسبوع</button>
+      <button class="chip" data-filter="done">مكتملة</button>
+      <button class="chip" data-filter="pending">معلقة</button>
+    </div>
+    <div id="tasks"></div>
+  </section>
+
+  <section class="card" style="margin-bottom:14px">
+    <div class="section-title"><h2>📅 الأسبوع</h2></div>
+    <div class="calendar-wrap"><div id="calendar" class="grid calendar"></div></div>
+  </section>
+
+  <section>
+    <div class="section-title"><h2>📚 المواد والتقدم</h2>
+      <div class="tools">
+        <button class="btn secondary" onclick="exportData()">💾 تصدير</button>
+        <button class="btn secondary" onclick="document.getElementById('importFile').click()">📥 استيراد</button>
+        <button class="btn danger" onclick="clearAll()">🗑️ مسح الكل</button>
+        <input id="importFile" type="file" accept="application/json,.json" hidden onchange="importData(event)">
+      </div>
+    </div>
+    <div id="subjects" class="grid subjects"></div>
+  </section>
+</main>
+
+<footer>منظم مذاكرتي — بياناتك محفوظة على جهازك داخل المتصفح.</footer>
+<div id="notice" class="notice"></div>
+
+<script>
+const KEY="studyApp";
+const DEFAULT={version:2,subjects:[],dark:false};
+let data=loadData();
+let currentFilter="all";
+
+function loadData(){
+  try{
+    const raw=localStorage.getItem(KEY);
+    if(!raw)return structuredClone(DEFAULT);
+    const x=JSON.parse(raw);
+    return {
+      version:2,
+      dark:!!x.dark,
+      subjects:Array.isArray(x.subjects)?x.subjects.map(s=>({
+        id:String(s.id),
+        name:String(s.name||"بدون اسم"),
+        tasks:Array.isArray(s.tasks)?s.tasks.map(t=>({
+          id:String(t.id),name:String(t.name||"مهمة"),date:/^\\d{4}-\\d{2}-\\d{2}$/.test(t.date)?t.date:today(),
+          time:typeof t.time==="string"?t.time:"",done:!!t.done,created:Number(t.created)||Date.now()
+        })):[],
+        created:Number(s.created)||Date.now()
+      })):[],
+    };
+  }catch(e){return structuredClone(DEFAULT)}
+}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){toast("تعذر حفظ البيانات على الجهاز")}}
+function makeId(){return (crypto&&crypto.randomUUID)?crypto.randomUUID():Date.now().toString(36)+"-"+Math.random().toString(36).slice(2)}
+function localDate(d=new Date()){
+  const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,"0"),day=String(d.getDate()).padStart(2,"0");
+  return `${y}-${m}-${day}`;
+}
+function today(){return localDate()}
+function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+function subjectById(id){return data.subjects.find(s=>String(s.id)===String(id))}
+function taskById(sid,tid){const s=subjectById(sid);return s?.tasks.find(t=>String(t.id)===String(tid))}
+function fmtDate(d){if(!d)return "";const x=new Date(d+"T00:00:00");return x.toLocaleDateString("ar-EG",{day:"numeric",month:"short"})}
+function taskStamp(t){return new Date(`${t.date||today()}T${t.time||"23:59"}`).getTime()}
+function startOfWeek(d=new Date()){
+  const x=new Date(d);x.setHours(0,0,0,0);const day=x.getDay();const diff=(day+6)%7;x.setDate(x.getDate()-diff);return x
+}
+function isToday(t){return t.date===today()}
+function isThisWeek(t){
+  const target=new Date((t.date||today())+"T00:00:00");
+  const start=startOfWeek();const end=new Date(start);end.setDate(end.getDate()+6);end.setHours(23,59,59,999);
+  return target>=start&&target<=end
+}
+function getAllTasks(){
+  return data.subjects.flatMap(s=>s.tasks.map(t=>({...t,subjectId:s.id,subjectName:s.name})))
+}
+function toast(msg){const n=document.getElementById("notice");n.textContent=msg;n.classList.add("show");clearTimeout(window._toast);window._toast=setTimeout(()=>n.classList.remove("show"),2200)}
+
+function render(){
+  document.body.classList.toggle("dark",data.dark);
+  document.getElementById("themeBtn").textContent=data.dark?"☀️":"🌙";
+  renderStats();renderSubjectSelect();renderTasks();renderSubjects();renderCalendar();
+}
+function renderStats(){
+  const all=getAllTasks(),done=all.filter(t=>t.done).length;
+  document.getElementById("statSubjects").textContent=data.subjects.length;
+  document.getElementById("statTasks").textContent=all.length;
+  document.getElementById("statDone").textContent=done;
+  document.getElementById("statPercent").textContent=(all.length?Math.round(done/all.length*100):0)+"%";
+}
+function renderSubjectSelect(){
+  const sel=document.getElementById("taskSubject"),old=sel.value;
+  sel.innerHTML=data.subjects.length?data.subjects.map(s=>`<option value="${esc(s.id)}">${esc(s.name)}</option>`).join(""):`<option value="">أضف مادة أولًا</option>`;
+  if(subjectById(old))sel.value=old;
+}
+function taskMatches(t){
+  if(currentFilter==="today")return isToday(t);
+  if(currentFilter==="week")return isThisWeek(t);
+  if(currentFilter==="done")return t.done;
+  if(currentFilter==="pending")return !t.done;
+  return true;
+}
+function renderTasks(){
+  const box=document.getElementById("tasks"),q=document.getElementById("search").value.trim().toLowerCase(),sort=document.getElementById("sort").value;
+  let list=getAllTasks().filter(t=>taskMatches(t)&&(!q||t.name.toLowerCase().includes(q)||t.subjectName.toLowerCase().includes(q)));
+  if(sort==="near")list.sort((a,b)=>taskStamp(a)-taskStamp(b));
+  if(sort==="far")list.sort((a,b)=>taskStamp(b)-taskStamp(a));
+  if(sort==="created")list.sort((a,b)=>b.created-a.created);
+  if(!list.length){box.innerHTML='<div class="empty">لا توجد مهام مطابقة حاليًا 🎯</div>';return}
+  box.innerHTML='<div class="task-list">'+list.map(t=>`
+    <div class="task ${t.done?"done":""}">
+      <input type="checkbox" ${t.done?"checked":""} aria-label="تغيير حالة المهمة" onchange="toggleTask('${esc(t.subjectId)}','${esc(t.id)}')">
+      <div><div class="task-name">${esc(t.name)}</div><div class="meta">📚 ${esc(t.subjectName)} · 📅 ${esc(fmtDate(t.date))}${t.time?" · ⏰ "+esc(t.time):""}</div></div>
+      <div class="actions">
+        <button class="mini" onclick="editTask('${esc(t.subjectId)}','${esc(t.id)}')">✏️</button>
+        <button class="mini danger" onclick="deleteTask('${esc(t.subjectId)}','${esc(t.id)}')">🗑️</button>
+      </div>
+    </div>`).join("")+'</div>';
+}
+function renderSubjects(){
+  const box=document.getElementById("subjects");
+  if(!data.subjects.length){box.innerHTML='<div class="card empty">ابدأ بإضافة أول مادة 📚</div>';return}
+  box.innerHTML=data.subjects.map(s=>{
+    const total=s.tasks.length,done=s.tasks.filter(t=>t.done).length,pct=total?Math.round(done/total*100):0;
+    const tasks=[...s.tasks].sort((a,b)=>taskStamp(a)-taskStamp(b));
+    return `<div class="card">
+      <div class="subject-head"><div class="subject-title">📘 ${esc(s.name)}</div>
+      <div class="actions"><button class="mini" onclick="editSubject('${esc(s.id)}')">✏️</button><button class="mini danger" onclick="deleteSubject('${esc(s.id)}')">🗑️</button></div></div>
+      <div class="meta" style="margin-top:6px">${done} من ${total} مكتملة</div>
+      <div class="progress"><i style="width:${pct}%"></i></div>
+      <div class="meta">${pct}% إنجاز</div>
+      <div class="task-list">${tasks.length?tasks.map(t=>`<div class="task ${t.done?"done":""}">
+        <input type="checkbox" ${t.done?"checked":""} onchange="toggleTask('${esc(s.id)}','${esc(t.id)}')">
+        <div><div class="task-name">${esc(t.name)}</div><div class="meta">📅 ${esc(fmtDate(t.date))}${t.time?" · ⏰ "+esc(t.time):""}</div></div>
+        <div class="actions"><button class="mini" onclick="editTask('${esc(s.id)}','${esc(t.id)}')">✏️</button><button class="mini danger" onclick="deleteTask('${esc(s.id)}','${esc(t.id)}')">🗑️</button></div>
+      </div>`).join(""):'<div class="empty">لا توجد مهام لهذه المادة</div>'}</div>
+    </div>`;
+  }).join("");
+}
+function renderCalendar(){
+  const box=document.getElementById("calendar"),start=startOfWeek();
+  let html="";
+  for(let i=0;i<7;i++){
+    const d=new Date(start);d.setDate(start.getDate()+i);const ds=localDate(d);
+    const dayName=d.toLocaleDateString("ar-EG",{weekday:"short"}),tasks=getAllTasks().filter(t=>t.date===ds);
+    html+=`<div class="card day"><b>${dayName}</b><small>${fmtDate(ds)}</small>${tasks.length?tasks.slice(0,4).map(t=>`<div class="cal-task" title="${esc(t.name)}">${t.done?"✅ ":""}${esc(t.name)}</div>`).join(""):'<div class="meta">—</div>'}</div>`;
+  }
+  box.innerHTML=html;
+}
+
+document.getElementById("subjectForm").addEventListener("submit",e=>{
+  e.preventDefault();const input=document.getElementById("subjectName"),name=input.value.trim();
+  if(!name)return;
+  if(data.subjects.some(s=>s.name.trim().toLowerCase()===name.toLowerCase())){toast("المادة موجودة بالفعل");return}
+  data.subjects.push({id:makeId(),name,tasks:[],created:Date.now()});save();input.value="";render();toast("تمت إضافة المادة ✅");
+});
+document.getElementById("taskForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  const name=document.getElementById("taskName").value.trim(),sid=document.getElementById("taskSubject").value,date=document.getElementById("taskDate").value,time=document.getElementById("taskTime").value;
+  if(!name||!sid||!date){toast("أكمل بيانات المهمة");return}
+  const s=subjectById(sid);if(!s){toast("اختر مادة صحيحة");return}
+  s.tasks.push({id:makeId(),name,date,time,done:false,created:Date.now()});save();e.target.reset();document.getElementById("taskDate").value=today();render();toast("تمت إضافة المهمة ✅");
+});
+document.querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>{
+  currentFilter=b.dataset.filter;document.querySelectorAll(".chip").forEach(x=>x.classList.toggle("active",x===b));renderTasks();
+}));
+
+function toggleTask(sid,tid){const t=taskById(sid,tid);if(!t)return;t.done=!t.done;save();render();toast(t.done?"تم إنجاز المهمة 🎉":"تم إرجاع المهمة")}
+function editSubject(id){const s=subjectById(id);if(!s)return;const n=prompt("اسم المادة:",s.name);if(n===null)return;const name=n.trim();if(!name)return; if(data.subjects.some(x=>x.id!==s.id&&x.name.toLowerCase()===name.toLowerCase())){toast("اسم المادة مستخدم بالفعل");return}s.name=name;save();render();toast("تم تعديل المادة")}
+function deleteSubject(id){const s=subjectById(id);if(!s)return;if(!confirm(`حذف مادة "${s.name}" وكل مهامها؟`))return;data.subjects=data.subjects.filter(x=>x.id!==id);save();render();toast("تم حذف المادة")}
+function editTask(sid,tid){
+  const t=taskById(sid,tid);if(!t)return;
+  const name=prompt("اسم المهمة:",t.name);if(name===null)return;if(!name.trim())return;
+  t.name=name.trim();
+  const date=prompt("التاريخ (YYYY-MM-DD):",t.date);if(date===null)return;
+  if(!/^\\d{4}-\\d{2}-\\d{2}$/.test(date)||isNaN(new Date(date+"T00:00:00").getTime())){toast("التاريخ غير صحيح");return}
+  t.date=date;
+  const time=prompt("الوقت HH:MM (اختياري):",t.time||"");if(time===null)return;
+  if(time&&!/^([01]\\d|2[0-3]):[0-5]\\d$/.test(time)){toast("الوقت غير صحيح");return}
+  t.time=time;save();render();toast("تم تعديل المهمة")}
+function deleteTask(sid,tid){const s=subjectById(sid);if(!s)return;const t=taskById(sid,tid);if(!t)return;if(!confirm(`حذف المهمة "${t.name}"؟`))return;s.tasks=s.tasks.filter(x=>x.id!==tid);save();render();toast("تم حذف المهمة")}
+
+function toggleTheme(){data.dark=!data.dark;save();render()}
+function clearAll(){if(!confirm("مسح كل المواد والمهام من هذا الجهاز؟ لا يمكن التراجع."))return;data={version:2,subjects:[],dark:data.dark};save();render();toast("تم مسح البيانات")}
+function exportData(){
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json;charset=utf-8"});
+  const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="منظم-مذاكرتي-نسخة-احتياطية.json";a.click();URL.revokeObjectURL(url);toast("تم تجهيز النسخة الاحتياطية 💾");
+}
+function importData(e){
+  const file=e.target.files[0];if(!file)return;
+  const r=new FileReader();
+  r.onload=()=>{
+    try{
+      const x=JSON.parse(r.result);
+      if(!x||!Array.isArray(x.subjects))throw new Error();
+      const normalized={version:2,dark:!!x.dark,subjects:x.subjects.map(s=>({id:String(s.id||makeId()),name:String(s.name||"بدون اسم"),created:Number(s.created)||Date.now(),tasks:Array.isArray(s.tasks)?s.tasks.map(t=>({id:String(t.id||makeId()),name:String(t.name||"مهمة"),date:/^\\d{4}-\\d{2}-\\d{2}$/.test(t.date)?t.date:today(),time:typeof t.time==="string"?t.time:"",done:!!t.done,created:Number(t.created)||Date.now()})):[]}))};
+      if(!confirm("استبدال البيانات الحالية بالنسخة المستوردة؟"))return;
+      data=normalized;save();render();toast("تم استيراد البيانات ✅");
+    }catch(err){toast("ملف النسخة الاحتياطية غير صالح")}
+    e.target.value="";
+  };r.readAsText(file);
+}
+document.getElementById("taskDate").value=today();
+render();
+</script>
+</body>
+</html>
